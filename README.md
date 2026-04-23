@@ -1,7 +1,7 @@
 # SpringUMA — Medical Records System
 
-![CompileTest]()
-![Integracion]()
+![CompileTest](https://github.com/Joalts8/PR6/actions/workflows/compile+test.yml)
+![Integracion](https://github.com/Joalts8/PR6/actions/workflows/integrationTest.yml)
 ![]()
 ![]()
 
