@@ -7,6 +7,11 @@ on:
     branches:
       - main
 
+permissions:
+  contents: write
+  checks: write
+  pull-requests: write
+
 jobs:
   integration_test:
     runs-on: ubuntu-latest
