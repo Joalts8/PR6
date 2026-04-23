@@ -90,4 +90,17 @@ public class ImagenControllerWebTestClientIT extends AbstractIntegration {
         }
     }
 
-   }
+    @Test
+    @DisplayName("Subir una imagen y verificar que se puede obtener la información")
+    void testSubirYObtenerImagen() {
+        subirImagen("healthy.png");
+
+        testClient.get().uri("/imagen/info/1")
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .jsonPath("$.id").isEqualTo(1)
+                .jsonPath("$.nombre").isEqualTo("healthy.png");
+    }
+}
