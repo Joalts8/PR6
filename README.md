@@ -1,7 +1,7 @@
 # SpringUMA — Medical Records System
 
-[![CompileTest](https://github.com/Joalts8/PR6/actions/workflows/compile+test.yml/badge.svg)](https://github.com/Joalts8/PR6/actions/workflows/compile+test.yml)
-[![Integracion](https://github.com/Joalts8/PR6/actions/workflows/integrationTest.yml/badge.svg)](https://github.com/Joalts8/PR6/actions/workflows/integrationTest.yml)
+[![compileTest](https://github.com/Joalts8/PR6/actions/workflows/compile+test.yml/badge.svg)](https://github.com/Joalts8/PR6/actions/workflows/compile+test.yml)
+[![integrationTest](https://github.com/Joalts8/PR6/actions/workflows/integrationTest.yml/badge.svg)](https://github.com/Joalts8/PR6/actions/workflows/integrationTest.yml)
 ![Jacoco](.github/badges/jacoco.svg)
 ![Branches](.github/badges/branches.svg)
 
