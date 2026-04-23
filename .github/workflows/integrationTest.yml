@@ -29,6 +29,9 @@ jobs:
       - name: Set execute permission for mvnw
         run: chmod +x mvnw
 
+      - name: Compile project
+        run: ./mvnw compile --no-transfer-progress
+
       - name: Run Integration tests with Maven
         run: ./mvnw verify --no-transfer-progress
 
@@ -36,14 +39,14 @@ jobs:
         if: always()
         run: |
           echo "Buscando archivos de reporte..."
-          find . -name "*.xml" -path "**/target/*-reports/*"
+          find . -name "TEST-*.xml" -path "**/target/*-reports/*"
 
       - name: Publish Test Report
         uses: dorny/test-reporter@v1
         if: always()
         with:
           name: Maven Tests Report
-          path: '**/target/surefire-reports/*.xml,**/target/failsafe-reports/*.xml'
+          path: '**/target/surefire-reports/TEST-*.xml,**/target/failsafe-reports/TEST-*.xml'
           reporter: java-junit
           fail-on-error: 'false'
 
