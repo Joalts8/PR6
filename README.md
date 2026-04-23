@@ -2,8 +2,8 @@
 
 [![CompileTest](https://github.com/Joalts8/PR6/actions/workflows/compile+test.yml/badge.svg)](https://github.com/Joalts8/PR6/actions/workflows/compile+test.yml)
 [![Integracion](https://github.com/Joalts8/PR6/actions/workflows/integrationTest.yml/badge.svg)](https://github.com/Joalts8/PR6/actions/workflows/integrationTest.yml)
-![]()
-![]()
+![Jacoco](.github/badges/jacoco.svg)
+![Branches](.github/badges/branches.svg)
 
 A Spring Boot REST API that models a small medical records system. Built as a practice project for the **Software Maintenance and Testing** course at the University of Málaga.
 

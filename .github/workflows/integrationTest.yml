@@ -30,4 +30,30 @@ jobs:
         run: chmod +x mvnw
 
       - name: Run Integration tests with Maven
-        run: ./mvnw -B verify
+        run: ./mvnw verify --no-transfer-progress
+
+      - name: Publish Test Report
+        uses: dorny/test-reporter@v1
+        if: success() || failure()
+        with:
+          name: Integration Tests Report
+          path: '**/target/failsafe-reports/*.xml'
+          reporter: java-junit
+
+      - name: Generate JaCoCo Badge
+        id: jacoco
+        uses: cicirello/jacoco-badge-generator@v2
+        with:
+          generate-branches-badge: true
+          jacoco-csv-file: target/site/jacoco/jacoco.csv
+
+      - name: Commit and push badges
+        if: github.event_name != 'pull_request'
+        run: |
+          if [[ `git status --porcelain` ]]; then
+            git config --global user.name 'github-actions'
+            git config --global user.email 'github-actions@github.com'
+            git add .github/badges/*.svg
+            git commit -m "Update JaCoCo badges"
+            git push
+          fi
