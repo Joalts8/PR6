@@ -45,3 +45,4 @@ jobs:
           sed -i "s|DOCKER_HUB_USERNAME|${{ secrets.DOCKERHUB_USERNAME }}|g" k8s/deployment.yml
           kubectl apply -f k8s/deployment.yml
           kubectl rollout restart deployment/springuma
+
