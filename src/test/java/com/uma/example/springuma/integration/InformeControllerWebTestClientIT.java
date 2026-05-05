@@ -90,4 +90,26 @@ public class InformeControllerWebTestClientIT extends AbstractIntegration {
                 .expectStatus().isOk();
 
     }
+
+    @Test
+    @DisplayName("Crear un informe y verificar que se puede obtener por su ID")
+    void testCrearYObtenerInforme() {
+        informe = new Informe();
+        informe.setContenido("Contenido del informe de prueba");
+        informe.setImagen(imagen);
+
+        testClient.post().uri("/informe")
+                .body(Mono.just(informe), Informe.class)
+                .exchange()
+                .expectStatus().isCreated();
+
+        testClient.get().uri("/informe/1")
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody()
+                .jsonPath("$.id").isEqualTo(1)
+                .jsonPath("$.contenido").isEqualTo("Contenido del informe de prueba")
+                .jsonPath("$.prediccion").exists();
+    }
 }
