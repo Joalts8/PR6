@@ -9,6 +9,16 @@ permissions:
   contents: write
   checks: write
   pull-requests: write
+  id-token: write
+  packages: write
+  deployments: write
+  statuses: write
+  actions: write
+  security-events: write
+  attestations: write
+  repository-projects: write
+  issues: write
+  discussions: write
 
 jobs:
   build-and-push:
