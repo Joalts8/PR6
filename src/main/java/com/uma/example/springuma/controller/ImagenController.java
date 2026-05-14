@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.Timer;
 import com.uma.example.springuma.model.Imagen;
 import com.uma.example.springuma.model.ImagenService;
 import com.uma.example.springuma.model.Paciente;
@@ -23,6 +26,19 @@ public class ImagenController {
 
     @Autowired
     private ImagenService imagenService;
+
+    private final Counter predictionCounter;
+    private final Timer predictionTimer;
+
+    public ImagenController(ImagenService imagenService, MeterRegistry registry) {
+        this.imagenService = imagenService;
+        this.predictionCounter = Counter.builder("predicciones_totales")
+                .description("Número de predicciones realizadas")
+                .register(registry);
+        this.predictionTimer = Timer.builder("prediccion_tiempo_respuesta")
+                .description("Tiempo de respuesta del endpoint de predicción")
+                .register(registry);
+    }
 
     @GetMapping("/imagen/{id}")
     public ResponseEntity<?> downloadImage(@PathVariable long id) {
@@ -39,15 +55,17 @@ public class ImagenController {
         return imagenService.getImagen(id);
     }
 
-    @GetMapping("/imagen/predict/{id}")
+    @GetMapping("/imagenes/predict/{id}")
     public ResponseEntity<?> getImagenPrediction(@PathVariable("id") Long id) {
-        try {
-            return ResponseEntity.ok(imagenService.getNewPrediccion(id));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.internalServerError().body("Error al realizar la prediccion" + e.getMessage());
-        }
-
+        return predictionTimer.record(() -> {
+            try {
+                predictionCounter.increment();
+                return ResponseEntity.ok(imagenService.getNewPrediccion(id));
+            } catch (Exception e) {
+                e.printStackTrace();
+                return ResponseEntity.internalServerError().body("Error al realizar la prediccion" + e.getMessage());
+            }
+        });
     }
 
     @PostMapping(value = "/imagen", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})

@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
 import com.uma.example.springuma.model.Paciente;
 import com.uma.example.springuma.model.PacienteService;
 
@@ -21,6 +23,15 @@ public class PacienteController {
 
     @Autowired
     private PacienteService pacienteService;
+
+    private final Counter patientRegistrationCounter;
+
+    public PacienteController(PacienteService pacienteService, MeterRegistry registry) {
+        this.pacienteService = pacienteService;
+        this.patientRegistrationCounter = Counter.builder("pacientes_registrados")
+                .description("Número de pacientes registrados")
+                .register(registry);
+    }
 
     @GetMapping("/paciente/{id}")
     public Paciente getPaciente(@PathVariable("id") Long id) {
@@ -36,6 +47,7 @@ public class PacienteController {
     public ResponseEntity<?> savePaciente(@RequestBody Paciente paciente) {
         try {
             pacienteService.addPaciente(paciente);
+            patientRegistrationCounter.increment();
             return ResponseEntity.status(201).build();
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body("El paciente ya existe");
